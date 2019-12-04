@@ -1,6 +1,5 @@
 name: team-rotation
 description: Determines the next person in a team rotation
-author: @lee-dohm
 inputs:
   exclude:
     description: GitHub handles of people to exclude from the rotation
