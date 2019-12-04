@@ -39,17 +39,6 @@ This workflow:
 1. Determines the next person in the team rotation after the person found in step 1
 1. Creates a new issue based on the `.github/weekly-issue-template.md` template and assigns the person found in step 2
 
-### Logic
-
-The next person in the rotation is determined by:
-
-1. Getting the list of handles associated with `teamName`, if any
-1. Adding any handles from `include`
-1. Removing any handles in `exclude`
-1. Sorting the list alphabetically
-1. Finding the handle specified in `last` in the list
-1. Taking the next handle in the list, if there are no more in the list, use the first handle in the list
-
 ### Inputs
 
 * `exclude` -- Space-separated list of GitHub handles to remove from the list
@@ -61,6 +50,17 @@ The next person in the rotation is determined by:
 ### Outputs
 
 * `next` -- GitHub handle of the next person in the rotation
+
+### Logic
+
+The next person in the rotation is determined by:
+
+1. Getting the list of handles associated with `teamName`, if any
+1. Adding any handles from `include`
+1. Removing any handles in `exclude`
+1. Sorting the list alphabetically
+1. Finding the handle specified in `last` in the list
+1. Taking the next handle in the list, if there are no more in the list, use the first handle in the list
 
 ## License
 
