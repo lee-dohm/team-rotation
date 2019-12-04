@@ -31,6 +31,12 @@ jobs:
           assignees: ${{ steps.rotation.outputs.next }}
 ```
 
+This workflow:
+
+1. Gets the person that was assigned to the last issue opened that matches the query `label:weekly-issue`
+1. Determines the next person in the team rotation after the person found in step 1
+1. Creates a new issue based on the `.github/weekly-issue-template.md` template and assigns the person found in step 2
+
 ## License
 
 [MIT](LICENSE.md)
