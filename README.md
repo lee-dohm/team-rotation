@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           filename: .github/weekly-issue-template.md
-          assignee: ${{ steps.rotation.outputs.next }}
+          assignees: ${{ steps.rotation.outputs.next }}
 ```
 
 ## License
