@@ -2,7 +2,7 @@ import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
 
-import { getNext, splitMembersList } from '../src/main'
+import { getNext, splitMembersList, splitTeamName } from '../src/main'
 
 test('getNext returns next element when last is in the member list', () => {
   const next = getNext(['foo', 'bar', 'baz'], 'bar')
@@ -44,4 +44,16 @@ test('splitMembersList strips at-signs from names', () => {
   const members = splitMembersList('@foo @bar @baz')
 
   expect(members).toStrictEqual(['foo', 'bar', 'baz'])
+})
+
+test('splitTeamName returns the appropriate object', () => {
+  const obj = splitTeamName('@foo/bar')
+
+  expect(obj).toStrictEqual({ org: 'foo', team_slug: 'bar' })
+})
+
+test('splitTeamName returns the appropriate object when no at-sign is used', () => {
+  const obj = splitTeamName('foo/bar')
+
+  expect(obj).toStrictEqual({ org: 'foo', team_slug: 'bar' })
 })

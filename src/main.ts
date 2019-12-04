@@ -23,10 +23,10 @@ export function splitMembersList(list) {
   return list.split(/\s+/).map(member => (member[0] == '@' ? member.substring(1) : member))
 }
 
-function splitTeamName(teamName) {
+export function splitTeamName(teamName) {
   const matches = teamName.match(/@?([^/]+)\/(.+)/)
 
-  return { org: matches[0], team_slug: matches[1] }
+  return { org: matches[1], team_slug: matches[2] }
 }
 
 async function run() {
