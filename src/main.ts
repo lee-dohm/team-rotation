@@ -31,8 +31,8 @@ export function splitTeamName(teamName) {
 
 async function run() {
   try {
-    const exclude = core.getInput('exclude')
-    const include = core.getInput('include')
+    const exclude = core.getInput('exclude') || []
+    const include = core.getInput('include') || []
     const last = core.getInput('last')
     const teamName = core.getInput('teamName')
     const token = core.getInput('token')
