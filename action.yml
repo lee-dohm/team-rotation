@@ -1,10 +1,23 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: team-rotation
+description: Determines the next person in a team rotation
+author: @lee-dohm
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  exclude:
+    description: GitHub handles of people to exclude from the rotation
+  include:
+    description: GitHub handles of people to include in the rotation
+  last:
+    description: GitHub handle of the last person in the rotation
+  teamName:
+    description: Name of the team in your organization to query the team members from
+  token:
+    description: Token to use to query the team members if `teamName` is used
+outputs:
+  next:
+    description: GitHub handle of the next person in the rotation
 runs:
   using: 'node12'
   main: 'lib/main.js'
+branding:
+  icon: rotate-cw
+  color: blue
