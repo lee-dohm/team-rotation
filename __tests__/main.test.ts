@@ -29,6 +29,12 @@ describe('getNext', () => {
     expect(next).toBe('foo')
   })
 
+  it('returns the first item in the list when last is empty', () => {
+    const next = getNext(['foo', 'bar', 'baz'], '')
+
+    expect(next).toBe('foo')
+  })
+
   it('returns the first item in the list when last is not found', () => {
     const next = getNext(['foo', 'bar', 'baz'], 'bamboozle')
 
