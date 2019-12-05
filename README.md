@@ -58,6 +58,7 @@ The next person in the rotation is determined by:
 1. Getting the list of handles associated with `teamName`, if any
 1. Adding any handles from `include`
 1. Removing any handles in `exclude`
+1. Removing any duplicates in the list
 1. Sorting the list alphabetically
 1. Finding the handle specified in `last` in the list
 1. Taking the next handle in the list, if there are no more in the list, use the first handle in the list

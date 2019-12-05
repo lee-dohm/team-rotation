@@ -50,7 +50,8 @@ async function run() {
     members = members
       .concat(splitMembersList(include))
       .filter(member => member in splitMembersList(exclude))
-      .sort()
+
+    members = members.filter((item, index) => members.indexOf(item) === index).sort()
 
     core.setOutput('next', getNext(members, last))
   } catch (error) {
