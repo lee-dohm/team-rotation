@@ -14,6 +14,10 @@ export function getNext(members, last) {
   }
 }
 
+export function getFinalMembers(members, include, exclude): string[] {
+  return Array.from(new Set(members.concat(include).filter(elem => !exclude.includes(elem))))
+}
+
 async function getTeamMembers(token, teamName) {
   const octokit = new github.GitHub(token)
   const { data: teamData } = await octokit.teams.getByName(splitTeamName(teamName))
@@ -51,9 +55,7 @@ async function run() {
       core.debug(`Team members: ${JSON.stringify(members)}`)
     }
 
-    members = members
-      .concat(splitMembersList(include))
-      .filter(member => member in splitMembersList(exclude))
+    members = getFinalMembers(members, include, exclude)
 
     core.debug(`Members (after include and exclude): ${JSON.stringify(members)}`)
 

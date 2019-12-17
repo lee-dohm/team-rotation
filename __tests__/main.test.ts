@@ -1,4 +1,42 @@
-import { getNext, splitMembersList, splitTeamName } from '../src/main'
+import { getFinalMembers, getNext, splitMembersList, splitTeamName } from '../src/main'
+
+describe('getFinalMembers', () => {
+  it('returns an empty list when all lists are empty', () => {
+    const list = getFinalMembers([], [], [])
+
+    expect(list).toStrictEqual([])
+  })
+
+  it('returns the original members list when include and exclude are empty', () => {
+    const list = getFinalMembers(['foo', 'bar', 'baz'], [], [])
+
+    expect(list).toStrictEqual(['foo', 'bar', 'baz'])
+  })
+
+  it('returns the include list when members and exclude are empty', () => {
+    const list = getFinalMembers([], ['foo', 'bar', 'baz'], [])
+
+    expect(list).toStrictEqual(['foo', 'bar', 'baz'])
+  })
+
+  it('returns the union of the members and include list', () => {
+    const list = getFinalMembers(['foo'], ['bar', 'baz'], [])
+
+    expect(list).toStrictEqual(['foo', 'bar', 'baz'])
+  })
+
+  it('does not return duplicate entries', () => {
+    const list = getFinalMembers(['foo'], ['foo'], [])
+
+    expect(list).toStrictEqual(['foo'])
+  })
+
+  it('returns the list of members excluding the entries from the exclude list', () => {
+    const list = getFinalMembers(['foo', 'bar', 'baz'], [], ['foo'])
+
+    expect(list).toStrictEqual(['bar', 'baz'])
+  })
+})
 
 describe('getNext', () => {
   it('returns next element when last is in the member list', () => {
