@@ -7,10 +7,24 @@ on:
       - master
 
 jobs:
-  test:
+  unitTest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - run: npm ci
       - run: npm run ci
+  integrationTest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: npm ci
+      - run: npm run build
+      - uses: ./
+        id: result
+        with:
+          last: lee-dohm
+          include: lee-dohm octocat
+      - run: exit 1
+        if: steps.result.outputs.next != 'octocat'
