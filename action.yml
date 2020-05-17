@@ -16,7 +16,7 @@ outputs:
     description: GitHub handle of the next person in the rotation
 runs:
   using: 'node12'
-  main: 'lib/main.js'
+  main: 'dist/index.js'
 branding:
   icon: rotate-cw
   color: blue
