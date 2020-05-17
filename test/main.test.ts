@@ -1,4 +1,4 @@
-import { getFinalMembers, getNext, splitMembersList, splitTeamName } from '../src/main'
+import { getFinalMembers, getNext, splitUsernameList, teamSlugToParams } from '../src/main'
 
 describe('getFinalMembers', () => {
   it('returns an empty list when all lists are empty', () => {
@@ -76,30 +76,48 @@ describe('getNext', () => {
   })
 })
 
-describe('splitMembersList', () => {
+describe('splitUsernameList', () => {
   it('splits on whitespace', () => {
-    const members = splitMembersList('foo bar baz')
+    const members = splitUsernameList('foo bar baz')
 
     expect(members).toStrictEqual(['foo', 'bar', 'baz'])
   })
 
   it('strips at-signs from names', () => {
-    const members = splitMembersList('@foo @bar @baz')
+    const members = splitUsernameList('@foo @bar @baz')
 
     expect(members).toStrictEqual(['foo', 'bar', 'baz'])
   })
+
+  it('returns an empty list when given an empty string', () => {
+    const members = splitUsernameList('')
+
+    expect(members).toStrictEqual([])
+  })
+
+  it('eliminates empty entries', () => {
+    const members = splitUsernameList('@foo @ @baz')
+
+    expect(members).toStrictEqual(['foo', 'baz'])
+  })
 })
 
-describe('splitTeamName', () => {
+describe('teamSlugToParams', () => {
   it('returns the appropriate object', () => {
-    const obj = splitTeamName('@foo/bar')
+    const obj = teamSlugToParams('@foo/bar')
 
     expect(obj).toStrictEqual({ org: 'foo', team_slug: 'bar' })
   })
 
   it('returns the appropriate object when no at-sign is used', () => {
-    const obj = splitTeamName('foo/bar')
+    const obj = teamSlugToParams('foo/bar')
 
     expect(obj).toStrictEqual({ org: 'foo', team_slug: 'bar' })
+  })
+
+  it('throws an error when a malformatted team name is given', () => {
+    expect(() => {
+      teamSlugToParams('')
+    }).toThrow()
   })
 })
