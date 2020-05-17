@@ -4,7 +4,6 @@ import User from '../src/user'
 const [fooUser, barUser, bazUser] = [new User('foo'), new User('bar'), new User('baz')]
 
 describe('getFinalMembers', () => {
-
   it('returns an empty list when all lists are empty', () => {
     const list = getFinalMembers([], [], [])
 

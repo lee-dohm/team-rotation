@@ -63,7 +63,10 @@ async function getTeamMembers(token: string, teamName: string) {
  * @returns Array of normalized GitHub usernames
  */
 export function splitUsernameList(text: string): User[] {
-  return text.split(/\s+/).filter(el => el != '').map(el => new User(el))
+  return text
+    .split(/\s+/)
+    .filter(el => el != '')
+    .map(el => new User(el))
 }
 
 /**
