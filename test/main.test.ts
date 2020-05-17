@@ -1,6 +1,10 @@
 import { getFinalMembers, getNext, splitUsernameList, teamSlugToParams } from '../src/main'
+import User from '../src/user'
+
+const [fooUser, barUser, bazUser] = [new User('foo'), new User('bar'), new User('baz')]
 
 describe('getFinalMembers', () => {
+
   it('returns an empty list when all lists are empty', () => {
     const list = getFinalMembers([], [], [])
 
@@ -8,71 +12,71 @@ describe('getFinalMembers', () => {
   })
 
   it('returns the original members list when include and exclude are empty', () => {
-    const list = getFinalMembers(['foo', 'bar', 'baz'], [], [])
+    const list = getFinalMembers([fooUser, barUser, bazUser], [], [])
 
-    expect(list).toStrictEqual(['foo', 'bar', 'baz'])
+    expect(list).toStrictEqual([fooUser, barUser, bazUser])
   })
 
   it('returns the include list when members and exclude are empty', () => {
-    const list = getFinalMembers([], ['foo', 'bar', 'baz'], [])
+    const list = getFinalMembers([], [fooUser, barUser, bazUser], [])
 
-    expect(list).toStrictEqual(['foo', 'bar', 'baz'])
+    expect(list).toStrictEqual([fooUser, barUser, bazUser])
   })
 
   it('returns the union of the members and include list', () => {
-    const list = getFinalMembers(['foo'], ['bar', 'baz'], [])
+    const list = getFinalMembers([fooUser], [barUser, bazUser], [])
 
-    expect(list).toStrictEqual(['foo', 'bar', 'baz'])
+    expect(list).toStrictEqual([fooUser, barUser, bazUser])
   })
 
   it('does not return duplicate entries', () => {
-    const list = getFinalMembers(['foo'], ['foo'], [])
+    const list = getFinalMembers([fooUser], [fooUser], [])
 
-    expect(list).toStrictEqual(['foo'])
+    expect(list).toStrictEqual([fooUser])
   })
 
   it('returns the list of members excluding the entries from the exclude list', () => {
-    const list = getFinalMembers(['foo', 'bar', 'baz'], [], ['foo'])
+    const list = getFinalMembers([fooUser, barUser, bazUser], [], [fooUser])
 
-    expect(list).toStrictEqual(['bar', 'baz'])
+    expect(list).toStrictEqual([barUser, bazUser])
   })
 })
 
 describe('getNext', () => {
   it('returns next element when last is in the member list', () => {
-    const next = getNext(['foo', 'bar', 'baz'], 'bar')
+    const next = getNext([fooUser, barUser, bazUser], 'bar')
 
-    expect(next).toBe('baz')
+    expect(next).toBe(bazUser)
   })
 
   it('returns the first item in the list when last is the last member', () => {
-    const next = getNext(['foo', 'bar', 'baz'], 'baz')
+    const next = getNext([fooUser, barUser, bazUser], 'baz')
 
-    expect(next).toBe('foo')
+    expect(next).toBe(fooUser)
   })
 
   it('returns the first item in the list when last is null', () => {
-    const next = getNext(['foo', 'bar', 'baz'], null)
+    const next = getNext([fooUser, barUser, bazUser], null)
 
-    expect(next).toBe('foo')
+    expect(next).toBe(fooUser)
   })
 
   it('returns the first item in the list when last is undefined', () => {
-    const next = getNext(['foo', 'bar', 'baz'], undefined)
+    const next = getNext([fooUser, barUser, bazUser], undefined)
 
-    expect(next).toBe('foo')
+    expect(next).toBe(fooUser)
   })
 
   it('returns the first item in the list when last is empty', () => {
-    const next = getNext(['foo', 'bar', 'baz'], '')
+    const next = getNext([fooUser, barUser, bazUser], '')
 
-    expect(next).toBe('foo')
+    expect(next).toBe(fooUser)
   })
 
   it('returns the first item in the list when last is not found', () => {
-    const next = getNext(['foo', 'bar', 'baz'], 'bamboozle')
+    const next = getNext([fooUser, barUser, bazUser], 'bamboozle')
 
-    expect(next).toBe('foo')
+    expect(next).toBe(fooUser)
   })
 })
 
@@ -80,13 +84,13 @@ describe('splitUsernameList', () => {
   it('splits on whitespace', () => {
     const members = splitUsernameList('foo bar baz')
 
-    expect(members).toStrictEqual(['foo', 'bar', 'baz'])
+    expect(members).toStrictEqual([fooUser, barUser, bazUser])
   })
 
   it('strips at-signs from names', () => {
     const members = splitUsernameList('@foo @bar @baz')
 
-    expect(members).toStrictEqual(['foo', 'bar', 'baz'])
+    expect(members).toStrictEqual([fooUser, barUser, bazUser])
   })
 
   it('returns an empty list when given an empty string', () => {
@@ -95,10 +99,10 @@ describe('splitUsernameList', () => {
     expect(members).toStrictEqual([])
   })
 
-  it('eliminates empty entries', () => {
-    const members = splitUsernameList('@foo @ @baz')
-
-    expect(members).toStrictEqual(['foo', 'baz'])
+  it('throws when an invalid username is in the list', () => {
+    expect(() => {
+      splitUsernameList('@foo @ @baz')
+    }).toThrow()
   })
 })
 

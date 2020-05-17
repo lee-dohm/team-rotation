@@ -1,6 +1,8 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 
+import User from './user'
+
 /**
  * Calculates the final list of usernames.
  *
@@ -12,7 +14,7 @@ import * as github from '@actions/github'
  * @param exclude List of usernames to exclude
  * @returns List of usernames to use for the team rotation
  */
-export function getFinalMembers(members: string[], include: string[], exclude: string[]): string[] {
+export function getFinalMembers(members: User[], include: User[], exclude: User[]): User[] {
   return Array.from(new Set(members.concat(include).filter(elem => !exclude.includes(elem))))
 }
 
@@ -23,11 +25,11 @@ export function getFinalMembers(members: string[], include: string[], exclude: s
  * @param last Username of the last person to be chosen in the rotation, if any
  * @returns Username of the next person in the rotation
  */
-export function getNext(members: string[], last: string | null | undefined): string {
+export function getNext(members: User[], last: string | null | undefined): User {
   core.debug(`Members: ${JSON.stringify(members)}`)
   core.debug(`Last: ${JSON.stringify(last)}`)
 
-  const lastIndex = members.findIndex(member => member == last)
+  const lastIndex = members.findIndex(member => member.equals(last))
 
   if (lastIndex == -1 || lastIndex + 1 >= members.length) {
     return members[0]
@@ -48,11 +50,11 @@ async function getTeamMembers(token: string, teamName: string) {
   const { data: teamData } = await octokit.teams.getByName(teamSlugToParams(teamName))
   const { data: data } = await octokit.teams.listMembers({ team_id: teamData.id })
 
-  return data.map(member => member.login)
+  return data.map(member => new User(member.login))
 }
 
 /**
- * Splits a text list of space-separated GitHub usernames into an array.
+ * Splits a text list of space-separated GitHub usernames into an array of users.
  *
  * It also normalizes them by stripping the at-sign, if any, from the beginning of the username.
  *
@@ -60,11 +62,8 @@ async function getTeamMembers(token: string, teamName: string) {
  *
  * @returns Array of normalized GitHub usernames
  */
-export function splitUsernameList(text: string) {
-  return text
-    .split(/\s+/)
-    .map(member => (member[0] == '@' ? member.substring(1) : member))
-    .filter(member => member != '')
+export function splitUsernameList(text: string): User[] {
+  return text.split(/\s+/).filter(el => el != '').map(el => new User(el))
 }
 
 /**
@@ -94,7 +93,7 @@ async function run() {
     const includes = splitUsernameList(includeText)
     const excludes = splitUsernameList(excludeText)
 
-    let members: string[] = []
+    let members: User[] = []
 
     if (teamName) {
       if (!token) {
@@ -111,7 +110,7 @@ async function run() {
 
     members = members.filter((item, index) => members.indexOf(item) === index).sort()
 
-    core.setOutput('next', getNext(members, last))
+    core.setOutput('next', getNext(members, last).login)
   } catch (error) {
     core.setFailed(error.message)
   }
