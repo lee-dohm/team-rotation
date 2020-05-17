@@ -27,5 +27,5 @@ jobs:
           last: lee-dohm
           include: lee-dohm octocat
       - run: exit 1
-        name: "Fail if `steps.result.outputs.next != 'octocat'"
+        name: "Fail unless steps.result.outputs.next == 'octocat'"
         if: steps.result.outputs.next != 'octocat'
