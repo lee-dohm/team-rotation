@@ -14,11 +14,11 @@ export function getNext(members, last) {
   }
 }
 
-export function getFinalMembers(members, include, exclude): string[] {
+export function getFinalMembers(members: string[], include: string, exclude: string): string[] {
   return Array.from(new Set(members.concat(include).filter(elem => !exclude.includes(elem))))
 }
 
-async function getTeamMembers(token, teamName) {
+async function getTeamMembers(token: string, teamName: string) {
   const octokit = new github.GitHub(token)
   const { data: teamData } = await octokit.teams.getByName(splitTeamName(teamName))
   const { data: data } = await octokit.teams.listMembers({ team_id: teamData.id })
@@ -26,12 +26,16 @@ async function getTeamMembers(token, teamName) {
   return data.map(member => member.login)
 }
 
-export function splitMembersList(list) {
+export function splitMembersList(list: string) {
   return list.split(/\s+/).map(member => (member[0] == '@' ? member.substring(1) : member))
 }
 
-export function splitTeamName(teamName) {
+export function splitTeamName(teamName: string) {
   const matches = teamName.match(/@?([^/]+)\/(.+)/)
+
+  if (!matches) {
+    throw new Error(`'${teamName}' is not a valid team name`)
+  }
 
   return { org: matches[1], team_slug: matches[2] }
 }
