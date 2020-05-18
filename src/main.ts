@@ -15,7 +15,7 @@ import User from './user'
  * @returns List of usernames to use for the team rotation
  */
 export function getFinalMembers(members: User[], include: User[], exclude: User[]): User[] {
-  return Array.from(new Set(members.concat(include).filter(elem => !exclude.includes(elem))))
+  return Array.from(new Set(members.concat(include).filter((elem) => !exclude.includes(elem))))
 }
 
 /**
@@ -29,7 +29,7 @@ export function getNext(members: User[], last: string | null | undefined): User 
   core.debug(`Members: ${JSON.stringify(members)}`)
   core.debug(`Last: ${JSON.stringify(last)}`)
 
-  const lastIndex = members.findIndex(member => member.equals(last))
+  const lastIndex = members.findIndex((member) => member.equals(last))
 
   if (lastIndex == -1 || lastIndex + 1 >= members.length) {
     return members[0]
@@ -50,7 +50,7 @@ async function getTeamMembers(token: string, teamName: string) {
   const { data: teamData } = await octokit.teams.getByName(teamSlugToParams(teamName))
   const { data: data } = await octokit.teams.listMembers({ team_id: teamData.id })
 
-  return data.map(member => new User(member.login))
+  return data.map((member) => new User(member.login))
 }
 
 /**
@@ -65,8 +65,8 @@ async function getTeamMembers(token: string, teamName: string) {
 export function splitUsernameList(text: string): User[] {
   return text
     .split(/\s+/)
-    .filter(el => el != '')
-    .map(el => new User(el))
+    .filter((el) => el != '')
+    .map((el) => new User(el))
 }
 
 /**
