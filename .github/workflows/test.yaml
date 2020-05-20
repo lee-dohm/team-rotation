@@ -1,10 +1,10 @@
-name: Test team-rotation
+name: Test
 
 on:
   pull_request:
   push:
     branches:
-      - master
+      - primary
 
 jobs:
   unitTest:
