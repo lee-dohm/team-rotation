@@ -46,9 +46,8 @@ export function getNext(members: User[], last: string | null | undefined): User 
  * @returns List of usernames belonging to the given team
  */
 async function getTeamMembers(token: string, teamName: string) {
-  const octokit = new github.GitHub(token)
-  const { data: teamData } = await octokit.teams.getByName(teamSlugToParams(teamName))
-  const { data: data } = await octokit.teams.listMembers({ team_id: teamData.id })
+  const octokit = github.getOctokit(token)
+  const { data: data } = await octokit.teams.listMembersInOrg(teamSlugToParams(teamName))
 
   return data.map((member) => new User(member.login))
 }
