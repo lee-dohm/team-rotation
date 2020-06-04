@@ -39,6 +39,12 @@ describe('getFinalMembers', () => {
 
     expect(list).toStrictEqual([barUser, bazUser])
   })
+
+  it('returns the list of members when given includes and excludes', () => {
+    const list = getFinalMembers([fooUser, barUser], [bazUser], [barUser])
+
+    expect(list).toStrictEqual([fooUser, bazUser])
+  })
 })
 
 describe('getNext', () => {
