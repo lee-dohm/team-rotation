@@ -93,7 +93,10 @@ async function run() {
     const token = core.getInput('token')
 
     const includes = splitUsernameList(includeText)
+    core.debug(`Includes: ${JSON.stringify(includes)}`)
+
     const excludes = splitUsernameList(excludeText)
+    core.debug(`Excludes: ${JSON.stringify(excludes)}`)
 
     let members: User[] = []
 
@@ -107,7 +110,6 @@ async function run() {
     }
 
     members = getFinalMembers(members, includes, excludes)
-
     core.debug(`Members (after include and exclude): ${JSON.stringify(members)}`)
 
     members = members.filter((item, index) => members.indexOf(item) === index).sort()
