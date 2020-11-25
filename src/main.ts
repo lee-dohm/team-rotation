@@ -15,7 +15,12 @@ import User from './user'
  * @returns List of usernames to use for the team rotation
  */
 export function getFinalMembers(members: User[], include: User[], exclude: User[]): User[] {
-  return Array.from(new Set(members.concat(include).filter((elem) => !exclude.includes(elem))))
+  return Array.from(
+    members
+      .concat(include)
+      .filter((elem) => exclude.every((item) => !elem.equals(item)))
+      .filter((item, index, arr) => arr.findIndex((elem) => elem.equals(item)) === index)
+  )
 }
 
 /**
