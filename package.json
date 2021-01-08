@@ -28,7 +28,7 @@
     "@actions/github": "^4.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.19",
+    "@types/jest": "^26.0.20",
     "@types/node": "^14.14.20",
     "@vercel/ncc": "^0.26.2",
     "extract-pr-titles": "^1.1.0",
